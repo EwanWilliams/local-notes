@@ -1,13 +1,25 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
+import { createServer } from 'http';
 import morgan from 'morgan';
 import cors from 'cors';
 import { Server } from 'socket.io';
 
 
+// access env variables
+const PORT = process.env._PORT;
+const CLIENT = process.env._CLIENT_PORT;
+
+
+// initialise express and socket server
 const app = express();
-const PORT = process.env.PORT;
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+    cors: {
+        origin: [`http://localhost:${CLIENT}`]
+    }
+});
 
 
 // middleware
@@ -16,10 +28,20 @@ app.use(morgan('dev'));
 app.use(cors());
 
 
-// test API call
+// EXPRESS API
 app.get('/test', (req, res) => {
     res.status(200).json({message: "this message came from the server"});
 });
 
+// run server listening on set port
+httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// SOCKET.IO FUNCTIONALITY
+io.on('connection', (socket) => {
+    console.log(socket.id);
+
+    socket.on('send-message', (data) => {
+        console.log(data);
+        socket.broadcast.emit('recieve-message', data);
+    });
+});
