@@ -1,0 +1,36 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: gainsboro;
+}
+
+/* TEXT AREA PAGE STYLING (currently set to A4 size) */
+.editorContainer .ql-editor {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    margin: 1rem;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+    background-color: white;
+}
+
+
+/* WHOLE QUILL CONTAINER STYLING */
+.editorContainer .ql-container.ql-snow {
+    display: flex;
+    justify-content: center;
+    border: none;
+}
+
+/* TOOLBAR STYLING */
+.editorContainer .ql-toolbar.ql-snow {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: gainsboro;
+    justify-content: center;
+}
