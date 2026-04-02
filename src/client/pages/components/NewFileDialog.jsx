@@ -7,6 +7,7 @@ export default function NewFileDialog() {
 
     const handleNewFile = async () => {
         try {
+            // title cant be nothing
             if (!newTitle.trim()) {
                 alert("Please enter a title.");
                 setNewTitle("");
@@ -20,10 +21,9 @@ export default function NewFileDialog() {
                 body: JSON.stringify(sendTitle)
             });
 
-            if (response.status == 200) {
+            if (response.status == 201) {
                 const data = await response.json();
-                alert(data);
-                //navigate(`/edit`)
+                navigate(`/edit/${data.fileId}`);
             } else {
                 alert(response.status);
             }
