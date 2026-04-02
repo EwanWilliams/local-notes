@@ -1,7 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
+import SocketTestUi from "./components/SocketTest";
+import { Editor } from "./components/Editor";
 
 export default function App() {
     return (
-        <h1>Hey from react</h1>
+        <Fragment>
+            <Editor />
+        </Fragment>
     );
 }
