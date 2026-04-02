@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Edit from "./pages/edit";
+import New from "./pages/new";
 
 
 export default function App() {
@@ -15,9 +16,15 @@ export default function App() {
             <main>
                 <Routes>
                     <Route
+                        path='/'
+                        element={
+                            <Navigate to='/edit' />
+                        }
+                    />
+                    <Route
                         path='/new'
                         element={
-                            <Navigate to={`/edit`}/>
+                            <New />
                         } 
                     />
                     <Route path='/edit' element={<Edit />}/>
