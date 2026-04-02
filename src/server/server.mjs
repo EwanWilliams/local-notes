@@ -41,8 +41,8 @@ httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 io.on('connection', (socket) => {
     console.log(socket.id);
 
-    socket.on('send-message', (data) => {
-        console.log(data);
-        socket.broadcast.emit('recieve-message', data);
+    // on receiving changes made by a user
+    socket.on('user-changes', delta => {
+        socket.broadcast.emit('new-changes', delta);
     });
 });

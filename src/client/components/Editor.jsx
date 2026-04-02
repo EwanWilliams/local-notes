@@ -59,10 +59,46 @@ export function Editor() {
     }, []);
 
 
-    //
+    // SEND CHANGES MADE BY THE USER
     useEffect(() => {
+        // don't run if socket or quill don't exist yet
+        if (socket == null || quill == null) return;
 
-    });
+        // function emits changes made by the user
+        const sendTextChange = (delta, oldDelta, source) => {
+            // ignore changes made by anything that is not the user
+            if (source !== 'user') return;
+
+            // emit event 'user-changes' passing the changes
+            socket.emit('user-changes', delta);
+        }
+
+        // on quill built in API event 'text-change'
+        quill.on('text-change', sendTextChange);
+
+        return () => { // remove handler when done
+            quill.off('text-change', sendTextChange);
+        }
+    }, [socket, quill]);
+
+
+    // RECEIVE CHANGES MADE FROM THE SERVER
+    useEffect(() => {
+        // don't run if socket or quill don't exist yet
+        if (socket == null || quill == null) return;
+
+        // function emits changes made by the user
+        const receiveTextChange = (delta) => {
+            quill.updateContents(delta);
+        }
+
+        // on receiving new changes from the server
+        socket.on('new-changes', receiveTextChange);
+
+        return () => { // remove handler when done
+            socket.off('new-changes', receiveTextChange);
+        }
+    }, [socket, quill]);
 
     return (
         <div className='editorContainer' ref={containerRef}></div>
