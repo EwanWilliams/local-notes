@@ -77,7 +77,7 @@ io.on('connection', (socket) => {
             socket.broadcast.to(fileId).emit('new-changes', delta);
         });
 
-        //
+        // save file to database when called
         socket.on('save-file', async data => {
             await File.findByIdAndUpdate(fileId, { data });
         });

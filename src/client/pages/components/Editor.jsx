@@ -4,7 +4,8 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import { io } from 'socket.io-client';
 
-
+// autosave interval, potential battery life implications
+const SAVE_INTERVAL = 3000
 // custom toolbar layout and options
 const toolbarConfig = [
     // heading/normal dropdown
@@ -124,6 +125,22 @@ export function Editor() {
             socket.off('new-changes', receiveTextChange);
         }
     }, [socket, quill]);
+
+
+    // every interval save whole contents of the quill editor to the database
+    useEffect(() => {
+        // don't run if socket or quill don't exist yet
+        if (socket == null || quill == null) return;
+
+        const timer = setInterval(() => {
+            socket.emit('save-file', quill.getContents());
+        }, SAVE_INTERVAL);
+
+        return () => {
+            clearInterval(timer);
+        }
+    }, [socket, quill]);
+
 
     return (
         <div className='editorContainer' ref={containerRef}></div>
