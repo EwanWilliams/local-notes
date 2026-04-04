@@ -8,6 +8,7 @@ import { Server } from 'socket.io';
 import { instrument } from '@socket.io/admin-ui';
 import mongoose from 'mongoose';
 import fileRoutes from './routes/file.mjs';
+import File from './models/File.mjs';
 
 
 // access env variables
@@ -44,11 +45,42 @@ mongoose.connect(DB_URI).then(() => console.log("Connected to DB.")).catch(error
 app.use('/api/file', fileRoutes);
 
 
+// get file from database
+async function findFile(fileId) {
+    try {
+        const data = await File.findById(fileId);
+        if (data) return data;
+        return null;
+    } catch (err) {
+        console.error("Find file error: ", err);
+        return null;
+    }
+} 
+
+
 // SOCKET.IO FUNCTIONALITY
 io.on('connection', (socket) => {
-    // on receiving changes made by a user
-    socket.on('user-changes', delta => {
-        socket.broadcast.emit('new-changes', delta);
+    // on a request for a file from the user
+    socket.on('get-file', async fileId => {
+
+        // attempt to find and load file for client
+        const loadFile = await findFile(fileId);
+        if (loadFile) { // if file found successfully
+            socket.join(fileId); // put the client in correct room
+            socket.emit('load-file', loadFile.data); // send the file
+        } else {
+            socket.emit('failed-load'); // tell the client load failed
+        }
+
+        // on receiving changes made by a user
+        socket.on('user-changes', delta => {
+            socket.broadcast.to(fileId).emit('new-changes', delta);
+        });
+
+        //
+        socket.on('save-file', async data => {
+            await File.findByIdAndUpdate(fileId, { data });
+        });
     });
 });
 

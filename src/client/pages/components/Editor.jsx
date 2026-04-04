@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import { io } from 'socket.io-client';
@@ -26,6 +27,8 @@ const toolbarConfig = [
 
 
 export function Editor() {
+    const navigate = useNavigate();
+    const { id: fileId } = useParams();
     // storing socket connection and quill instance in state
     const [socket, setSocket] = useState();
     const [quill, setQuill] = useState();
@@ -55,8 +58,30 @@ export function Editor() {
 
         // initialise quill instance
         const quillInst = new Quill(editor, { theme: 'snow', modules: { toolbar: toolbarConfig }});
+        quillInst.disable(); // don't enable editor until file is loaded
         setQuill(quillInst);
     }, []);
+
+
+    // LOAD DOCUMENT FROM ID AND JOIN SOCKET ROOM
+    useEffect(() => {
+        // don't run if socket or quill don't exist yet
+        if (socket == null || quill == null) return;
+
+        socket.emit('get-file', fileId);
+
+        socket.once('load-file', loadFile => {
+            quill.setContents(loadFile);
+            quill.enable();
+        });
+
+        socket.on('failed-load', () => {
+            alert("Failed to find file.");
+            socket.disconnect();
+            navigate('/');
+        });
+    }, [socket, quill, fileId]);
+
 
 
     // SEND CHANGES MADE BY THE USER

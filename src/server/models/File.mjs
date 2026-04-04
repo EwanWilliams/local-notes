@@ -6,7 +6,10 @@ const fileSchema = new mongoose.Schema({
         maxLength: 50,
         required: true
     },
-    data: Object
+    data: {
+        type: Object,
+        default: ""
+    }
 });
 
 const File = mongoose.model('Files', fileSchema, 'Files');
