@@ -5,10 +5,11 @@
 body {
     margin: 0;
     background-color: gainsboro;
+    min-width: 870px;
 }
 
 /* TEXT AREA PAGE STYLING (currently set to A4 size) */
-.editorContainer .ql-editor {
+.ql-editor {
     width: 210mm;
     min-height: 297mm;
     padding: 20mm;
@@ -24,15 +25,72 @@ body {
     justify-content: center;
     border: none;
 }
+.viewerContainer .ql-container.ql-snow {
+    display: flex;
+    justify-content: center;
+    border: none;
+}
+
 
 /* TOOLBAR STYLING */
-.editorContainer .ql-toolbar.ql-snow {
+#editorToolbar {
     display: flex;
     position: sticky;
+    padding: 0;
+    min-height: 40px;
+    align-items: center;
     top: 0;
     z-index: 1;
     background-color: gainsboro;
+    width: 100vw;
     justify-content: center;
+}
+#viewerToolbar {
+    display: flex;
+    position: sticky;
+    padding: 0;
+    min-height: 40px;
+    top: 0;
+    z-index: 1;
+    background-color: gainsboro;
+    width: 100vw;
+    justify-content: center;
+}
+.toolbar-left {
+    display: flex;
+    width: 10%;
+    min-width: fit-content;
+}
+.toolbar-centre {
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    min-width: fit-content;
+}
+.toolbar-right {
+    display: flex;
+    width: 10%;
+    min-width: fit-content;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(221, 207, 147);
+    padding: 0;
+    min-height: 40px;
+    color: #444;
+}
+.ql-snow.ql-toolbar button.ql-switchViewButton {
+    width: fit-content;
+    padding: 5px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.ql-snow.ql-toolbar button.ql-switchEditButton {
+    width: fit-content;
+    padding: 5px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
 }
 
 

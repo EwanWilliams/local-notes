@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Edit from "./pages/edit";
+import View from "./pages/view";
 import New from "./pages/new";
 
 
@@ -28,6 +29,7 @@ export default function App() {
                         } 
                     />
                     <Route path='/edit/:id' element={<Edit />}/>
+                    <Route path='/view/:id' element={<View />}/>
                 </Routes>
             </main>
         </Router>

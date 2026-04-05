@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, Fragment } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
@@ -6,7 +6,9 @@ import { io } from 'socket.io-client';
 
 // autosave interval, potential battery life implications
 const SAVE_INTERVAL = 3000
-// custom toolbar layout and options
+
+
+// custom toolbar layout and options NOT IN USE, added custom viewer button
 const toolbarConfig = [
     // heading/normal dropdown
     [{ 'header': [1, 2, 3, 4, false] }],
@@ -25,6 +27,36 @@ const toolbarConfig = [
     [{ 'color': [] }, { 'background': [] }],
     ['clean']
 ]
+
+
+// html format toolbar options to enable custom buttons
+const EditorToolbar = () => { return (
+    <div id='editorToolbar' className='editorToolbar'>
+        <div className='toolbar-left'></div>
+        <div className='toolbar-centre'>
+            
+            <select className="ql-font"></select>
+            <button className="ql-bold"></button>
+            <button className="ql-italic"></button>
+            <button className="ql-underline"></button>
+            <button className="ql-strike"></button>
+            <button className="ql-code-block"></button>
+            <select className="ql-align"></select>
+            <button className="ql-indent" value="-1"></button>
+            <button className="ql-indent" value="+1"></button>
+            <button className="ql-list" value="ordered"></button>
+            <button className="ql-list" value="bullet"></button>
+            <button className="ql-list" value="check"></button>
+            <button className="ql-link"></button>
+            <select className="ql-color"></select>
+            <select className="ql-background"></select>
+            <button className="ql-clean"></button>
+        </div>
+        <div className='toolbar-right'>
+            <button className='ql-switchViewButton'>View File</button>
+        </div>
+    </div>
+)};
 
 
 export function Editor() {
@@ -58,7 +90,19 @@ export function Editor() {
         wrapper.append(editor);
 
         // initialise quill instance
-        const quillInst = new Quill(editor, { theme: 'snow', modules: { toolbar: toolbarConfig }});
+        const quillInst = new Quill(editor, {
+             theme: 'snow',
+             modules: {
+                toolbar: {
+                    container: '#editorToolbar',
+                    handlers: {
+                        switchViewButton: () => {
+                            navigate(`/view/${fileId}`);
+                        }
+                    }
+                }
+            }
+        });
         quillInst.disable(); // don't enable editor until file is loaded
         setQuill(quillInst);
     }, []);
@@ -143,6 +187,9 @@ export function Editor() {
 
 
     return (
-        <div className='editorContainer' ref={containerRef}></div>
+        <Fragment>
+            <EditorToolbar />
+            <div className='editorContainer' ref={containerRef}></div>
+        </Fragment>
     );
 }
