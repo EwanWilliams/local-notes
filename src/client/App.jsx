@@ -27,7 +27,7 @@ export default function App() {
                             <New />
                         } 
                     />
-                    <Route path='/edit' element={<Edit />}/>
+                    <Route path='/edit/:id' element={<Edit />}/>
                 </Routes>
             </main>
         </Router>
