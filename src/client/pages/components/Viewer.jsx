@@ -7,7 +7,11 @@ import { io } from 'socket.io-client';
 
 const ViewerToolbar = () => { return (
     <div id='viewerToolbar' className='viewerToolbar'>
-        <button className='ql-switchEditButton'>Edit</button>
+        <div className='toolbar-left'></div>
+        <div className='toolbar-centre'></div>
+        <div className='toolbar-right'>
+            <button className='ql-switchEditButton'>Edit</button>
+        </div>
     </div>
 )};
 

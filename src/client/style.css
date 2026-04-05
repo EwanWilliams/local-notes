@@ -32,22 +32,57 @@ body {
 
 
 /* TOOLBAR STYLING */
-.ql-toolbar.ql-snow {
+#editorToolbar {
     display: flex;
     position: sticky;
+    padding: 0;
+    min-height: 40px;
+    align-items: center;
     top: 0;
     z-index: 1;
     background-color: gainsboro;
-    justify-content: center;
 }
 #viewerToolbar {
     display: flex;
     position: sticky;
+    padding: 0;
+    min-height: 40px;
     top: 0;
     z-index: 1;
     background-color: gainsboro;
-    justify-content: right;
-    padding-right: 5vw;
+}
+.toolbar-left {
+    display: flex;
+    min-width: 10vw;
+}
+.toolbar-centre {
+    display: flex;
+    min-width: 80vw;
+    justify-content: center;
+}
+.toolbar-right {
+    display: flex;
+    min-width: 10vw;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(221, 207, 147);
+    padding: 0;
+    min-height: 40px;
+    color: #444;
+}
+.ql-snow.ql-toolbar button.ql-switchViewButton {
+    width: fit-content;
+    padding: 0;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.ql-snow.ql-toolbar button.ql-switchEditButton {
+    width: fit-content;
+    padding: 0;
+    justify-content: center;
+    display: flex;
+    align-items: center;
 }
 
 
