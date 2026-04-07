@@ -157,7 +157,6 @@ export function Editor() {
         // don't run if socket or quill don't exist yet
         if (socket == null || quill == null) return;
 
-        // function emits changes made by the user
         const receiveTextChange = (delta) => {
             quill.updateContents(delta);
         }

@@ -21,4 +21,20 @@ router.post('/new', async (req, res) => {
 });
 
 
+// return list of files with titles
+router.get('/list', async (req, res) => {
+    try {
+        const files = await File.find({}, 'title');
+        if (!files) {
+            res.status(404).json({error: "No files founds."});
+        } else {
+            res.status(200).json(files);
+        }
+    } catch (err) {
+        console.error("List files error: ", err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+
 export default router;
