@@ -9,6 +9,7 @@ import {
 import Edit from "./pages/edit";
 import View from "./pages/view";
 import New from "./pages/new";
+import TestBrowse from "./pages/testbrowse";
 
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
                     />
                     <Route path='/edit/:id' element={<Edit />}/>
                     <Route path='/view/:id' element={<View />}/>
+                    <Route path='/testbrowse' element={<TestBrowse />} />
                 </Routes>
             </main>
         </Router>
