@@ -1,18 +1,13 @@
+import { useNavigate } from "react-router-dom";
+
 export default function FileBrowser({files = []}) {
-
-    function editFile(fileId) {
-        alert(`Edit file ${fileId}`);
-    }
-
-    function viewFile(fileId) {
-        alert(`View file ${fileId}`);
-    }
+    const navigate = useNavigate();
 
     const fileList = files.map(file => (
         <li key={file._id}>
             {file.title}
-            <button className='file-select-button' onClick={() => editFile(file._id)}>Edit</button>
-            <button className='file-select-button' onClick={() => viewFile(file._id)}>View</button>
+            <button className='file-select-button' onClick={() => navigate(`/edit/${file._id}`)}>Edit</button>
+            <button className='file-select-button' onClick={() => navigate(`/view/${file._id}`)}>View</button>
        </li>
     ));
 

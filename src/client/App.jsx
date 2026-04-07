@@ -20,7 +20,7 @@ export default function App() {
                     <Route
                         path='/'
                         element={
-                            <Navigate to='/edit' />
+                            <Navigate to='/testbrowse' />
                         }
                     />
                     <Route
