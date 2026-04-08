@@ -10,7 +10,7 @@ const ViewerToolbar = () => { return (
         <div className='toolbar-left'></div>
         <div className='toolbar-centre'></div>
         <div className='toolbar-right'>
-            <button className='ql-switchEditButton'>Edit</button>
+            <button className='ql-switchEditButton'>Edit Mode</button>
         </div>
     </div>
 )};

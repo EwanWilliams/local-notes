@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function FileBrowser({files = []}) {
@@ -18,9 +19,9 @@ export default function FileBrowser({files = []}) {
 
     // return list of files within container
     return (
-        <div id='file-browser' className='file-browser'>
+        <Fragment>
             <h2 className='app-title'>local-notes</h2>
-            {fileList.length > 0 ? <ul className='file-browser-list'>{fileList}</ul> : <p>No files.</p>}
-        </div>
+            {fileList.length > 0 ? <ul className='file-browser-list'>{fileList}</ul> : <p>Loading...</p>}
+        </Fragment>
     );
 }

@@ -8,31 +8,12 @@ import { io } from 'socket.io-client';
 const SAVE_INTERVAL = 3000
 
 
-// custom toolbar layout and options NOT IN USE, added custom viewer button
-const toolbarConfig = [
-    // heading/normal dropdown
-    [{ 'header': [1, 2, 3, 4, false] }],
-    // font options
-    [{ 'font': [] }],
-    // button options
-    ['bold', 'italic', 'underline', 'strike', 'code-block'],
-    // alignment options
-    [{ 'align': [] }],
-    [{ 'indent': '-1'}, { 'indent': '+1' }],
-    // list options
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
-    // hyperlink option
-    ['link'],
-    // colour options
-    [{ 'color': [] }, { 'background': [] }],
-    ['clean']
-]
-
-
 // html format toolbar options to enable custom buttons
 const EditorToolbar = () => { return (
     <div id='editorToolbar' className='editorToolbar'>
-        <div className='toolbar-left'></div>
+        <div className='toolbar-left'>
+            <button className='ql-fileBrowserButton'>Browse Files</button>
+        </div>
         <div className='toolbar-centre'>
             
             <select className="ql-font"></select>
@@ -53,13 +34,13 @@ const EditorToolbar = () => { return (
             <button className="ql-clean"></button>
         </div>
         <div className='toolbar-right'>
-            <button className='ql-switchViewButton'>View File</button>
+            <button className='ql-switchViewButton'>View Mode</button>
         </div>
     </div>
 )};
 
 
-export function Editor() {
+export function Editor({onBrowseFiles}) {
     const navigate = useNavigate();
     const { id: fileId } = useParams();
     // storing socket connection and quill instance in state
@@ -98,6 +79,9 @@ export function Editor() {
                     handlers: {
                         switchViewButton: () => {
                             navigate(`/view/${fileId}`);
+                        },
+                        fileBrowserButton: () => {
+                            onBrowseFiles();
                         }
                     }
                 }
@@ -126,7 +110,6 @@ export function Editor() {
             navigate('/');
         });
     }, [socket, quill, fileId]);
-
 
 
     // SEND CHANGES MADE BY THE USER
