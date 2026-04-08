@@ -5,17 +5,22 @@ export default function FileBrowser({files = []}) {
 
     // produce list of file elements
     const fileList = files.map(file => (
-        <li key={file._id}>
-            {file.title}
-            <button className='file-select-button' onClick={() => navigate(`/edit/${file._id}`)}>Edit</button>
-            <button className='file-select-button' onClick={() => navigate(`/view/${file._id}`)}>View</button>
+        <li key={file._id} className='file-selector'>
+            <div className='file-selector-title'>
+                {file.title}
+            </div>
+            <div className='file-selector-selectors'>
+                <button className='file-edit-button' onClick={() => navigate(`/edit/${file._id}`)}>Edit</button>
+                <button className='file-view-button' onClick={() => navigate(`/view/${file._id}`)}>View</button>
+            </div>
        </li>
     ));
 
     // return list of files within container
     return (
         <div id='file-browser' className='file-browser'>
-            {fileList.length > 0 ? <ul>{fileList}</ul> : <p>No files.</p>}
+            <h2 className='app-title'>local-notes</h2>
+            {fileList.length > 0 ? <ul className='file-browser-list'>{fileList}</ul> : <p>No files.</p>}
         </div>
     );
 }

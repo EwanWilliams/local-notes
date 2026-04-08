@@ -15,8 +15,8 @@ export default function TestBrowse() {
 
     return (
         <Fragment>
-            <button type='button' onClick={getFileList}>Find files</button>
             <FileBrowser files={fileList} />
+            <button type='button' onClick={getFileList}>Find files</button>
         </Fragment>
     );
 }

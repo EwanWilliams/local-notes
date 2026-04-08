@@ -6,6 +6,7 @@ body {
     margin: 0;
     background-color: gainsboro;
     min-width: 870px;
+    font-family: Helvetica, sans-serif;
 }
 
 /* TEXT AREA PAGE STYLING (currently set to A4 size) */
@@ -100,4 +101,59 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+}
+
+/* FILE BROWSER STYLING */
+.file-browser {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    width: 350px;
+    height: 100vh;
+    color: #444;
+    background-color: rgb(220, 237, 238);
+}
+.app-title {
+    margin-left: 15px;
+}
+.file-browser-list {
+    margin: 15px;
+    padding: 0;
+}
+.file-selector {
+    list-style: none;
+    display: flex;
+    margin-bottom: 5px;
+    padding-bottom: 4px;
+    flex-direction: row;
+    border-bottom: 1px solid;
+}
+.file-selector-selectors {
+    margin-left: auto;
+}
+.file-edit-button {
+	background-color:#44c767;
+	border:1px solid #18ab29;
+	color:#ffffff;
+	text-decoration:none;
+}
+.file-edit-button:hover {
+	background-color:#5cbf2a;
+}
+.file-edit-button:active {
+	position:relative;
+	top:1px;
+}
+.file-view-button {
+	background-color:#8e5bc9;
+	border:1px solid #7c37a3;
+	color:#ffffff;
+	text-decoration:none;
+}
+.file-view-button:hover {
+	background-color:#8a4cbd;
+}
+.file-view-button:active {
+	position:relative;
+	top:1px;
 }
