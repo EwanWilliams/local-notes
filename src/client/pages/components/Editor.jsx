@@ -5,7 +5,7 @@ import 'quill/dist/quill.snow.css';
 import { io } from 'socket.io-client';
 
 // autosave interval, potential battery life implications
-const SAVE_INTERVAL = 3000
+const SAVE_INTERVAL = 2000
 
 
 // html format toolbar options to enable custom buttons

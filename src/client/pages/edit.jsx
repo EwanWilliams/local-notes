@@ -1,7 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { Editor } from "./components/Editor";
 import FileBrowser from "./components/FileBrowser";
-import { getFileList } from "./utils.mjs";
 
 export default function Edit() {
     // file list for browser

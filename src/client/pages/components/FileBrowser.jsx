@@ -11,8 +11,15 @@ export default function FileBrowser({files = []}) {
                 {file.title}
             </div>
             <div className='file-selector-selectors'>
-                <button className='file-edit-button' onClick={() => navigate(`/edit/${file._id}`)}>Edit</button>
-                <button className='file-view-button' onClick={() => navigate(`/view/${file._id}`)}>View</button>
+                <button className='file-edit-button' onClick={() => {
+                    navigate(`/edit/${file._id}`);
+                    navigate(0);
+                }}>Edit</button>
+                <button className='file-view-button' onClick={() => {
+                    navigate(`/view/${file._id}`);
+                    navigate(0);
+                    }}
+                >View</button>
             </div>
        </li>
     ));

@@ -39,5 +39,5 @@ export default function Edit() {
                 <Viewer onBrowseFiles={toggleBrowser}/>
             </div>
         </Fragment>
-    )
+    );
 }
