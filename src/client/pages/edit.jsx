@@ -1,11 +1,12 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Editor } from "./components/Editor";
 import FileBrowser from "./components/FileBrowser";
+import { getFileList } from "./utils.mjs";
 
 export default function Edit() {
     // file list for browser
     const [fileList, setFileList] = useState([]);
-    const [browserOpen, setBrowserOpen] = useState();
+    const [browserOpen, setBrowserOpen] = useState(false);
 
     // function to update file list in browser
     async function getFileList() {
@@ -17,23 +18,27 @@ export default function Edit() {
         }
     }
 
-    // browse file button handler
-    function browseFilesClicked() {
-        if (!browserOpen) {
-            getFileList();
-            setBrowserOpen(true);
-            console.log(browserOpen);
-        } else {
-            setBrowserOpen(false);
-            console.log(browserOpen);
-        }
+    // toggle browser state variable
+    const toggleBrowser = () => {
+        setBrowserOpen(current => !current);
     }
+
+    // when browser toggle state changesa to open, update the file list
+    useEffect(() => {
+        if (browserOpen) {
+            getFileList();
+        }
+    }, [browserOpen]);
+
 
     return (
         <Fragment>
+            <div className={`file-browser${browserOpen ? '' : '-closed'}`}>
+                <FileBrowser files={fileList} />
+            </div>
             <div className={`filePage${browserOpen ? '-browserOpen' : ''}`}>
-                <Editor onBrowseFiles={browseFilesClicked}/>
+                <Editor onBrowseFiles={toggleBrowser}/>
             </div>
         </Fragment>
-    )
+    );
 }
