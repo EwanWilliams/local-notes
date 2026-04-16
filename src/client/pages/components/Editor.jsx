@@ -5,34 +5,15 @@ import 'quill/dist/quill.snow.css';
 import { io } from 'socket.io-client';
 
 // autosave interval, potential battery life implications
-const SAVE_INTERVAL = 3000
-
-
-// custom toolbar layout and options NOT IN USE, added custom viewer button
-const toolbarConfig = [
-    // heading/normal dropdown
-    [{ 'header': [1, 2, 3, 4, false] }],
-    // font options
-    [{ 'font': [] }],
-    // button options
-    ['bold', 'italic', 'underline', 'strike', 'code-block'],
-    // alignment options
-    [{ 'align': [] }],
-    [{ 'indent': '-1'}, { 'indent': '+1' }],
-    // list options
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
-    // hyperlink option
-    ['link'],
-    // colour options
-    [{ 'color': [] }, { 'background': [] }],
-    ['clean']
-]
+const SAVE_INTERVAL = 2000
 
 
 // html format toolbar options to enable custom buttons
 const EditorToolbar = () => { return (
     <div id='editorToolbar' className='editorToolbar'>
-        <div className='toolbar-left'></div>
+        <div className='toolbar-left'>
+            <button className='ql-fileBrowserButton'>Browse Files</button>
+        </div>
         <div className='toolbar-centre'>
             
             <select className="ql-font"></select>
@@ -53,13 +34,13 @@ const EditorToolbar = () => { return (
             <button className="ql-clean"></button>
         </div>
         <div className='toolbar-right'>
-            <button className='ql-switchViewButton'>View File</button>
+            <button className='ql-switchViewButton'>View Mode</button>
         </div>
     </div>
 )};
 
 
-export function Editor() {
+export function Editor({onBrowseFiles}) {
     const navigate = useNavigate();
     const { id: fileId } = useParams();
     // storing socket connection and quill instance in state
@@ -98,6 +79,9 @@ export function Editor() {
                     handlers: {
                         switchViewButton: () => {
                             navigate(`/view/${fileId}`);
+                        },
+                        fileBrowserButton: () => {
+                            onBrowseFiles();
                         }
                     }
                 }
@@ -128,7 +112,6 @@ export function Editor() {
     }, [socket, quill, fileId]);
 
 
-
     // SEND CHANGES MADE BY THE USER
     useEffect(() => {
         // don't run if socket or quill don't exist yet
@@ -157,7 +140,6 @@ export function Editor() {
         // don't run if socket or quill don't exist yet
         if (socket == null || quill == null) return;
 
-        // function emits changes made by the user
         const receiveTextChange = (delta) => {
             quill.updateContents(delta);
         }

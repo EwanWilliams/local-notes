@@ -7,15 +7,17 @@ import { io } from 'socket.io-client';
 
 const ViewerToolbar = () => { return (
     <div id='viewerToolbar' className='viewerToolbar'>
-        <div className='toolbar-left'></div>
+        <div className='toolbar-left'>
+            <button className='ql-fileBrowserButton'>Browse Files</button>
+        </div>
         <div className='toolbar-centre'></div>
         <div className='toolbar-right'>
-            <button className='ql-switchEditButton'>Edit</button>
+            <button className='ql-switchEditButton'>Edit Mode</button>
         </div>
     </div>
 )};
 
-export function Viewer() {
+export function Viewer({onBrowseFiles}) {
     const navigate = useNavigate();
     const { id: fileId } = useParams();
     // storing socket connection and quill instance in state
@@ -54,6 +56,9 @@ export function Viewer() {
                     handlers: {
                         switchEditButton: () => {
                             navigate(`/edit/${fileId}`);
+                        },
+                        fileBrowserButton: () => {
+                            onBrowseFiles();
                         }
                     }
                 }
