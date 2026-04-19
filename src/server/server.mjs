@@ -9,6 +9,7 @@ import { instrument } from '@socket.io/admin-ui';
 import mongoose from 'mongoose';
 import fileRoutes from './routes/file.mjs';
 import File from './models/File.mjs';
+import crypto from 'crypto';
 
 
 // access env variables
@@ -17,7 +18,34 @@ const CLIENT = process.env._CLIENT_PORT;
 const DB_URI = process.env.DB_URI;
 const ADMIN_USER = process.env.SOCKET_ADMIN_USER;
 const ADMIN_PWD = process.env.SOCKET_ADMIN_PWD;
+const SECRET_KEY = Buffer.from(process.env.SECRET_KEY, "hex");
+const ALGORITHM = "aes-256-gcm";
 
+
+// encryption and decryption functions to be made avaliable to other modules
+// encrypt plain text
+function encryptField(plainText) {
+    if (plainText == null || plainText === "") return plainText;
+    const iv = crypto.randomBytes(12);
+    const cipher = crypto.createCipheriv(ALGORITHM, SECRET_KEY, iv);
+    const cipherText = Buffer.concat([cipher.update(String(plainText), "utf-8"), cipher.final()]);
+    const authTag = cipher.getAuthTag();
+    return Buffer.concat([iv, authTag, cipherText]).toString("base64");
+}
+
+// decrypt encoded text
+function decryptField(encodedText) {
+    if (encodedText == null || encodedText === "") return encodedText;
+    const b = Buffer.from(encodedText, "base64");
+    const iv = b.subarray(0, 12);
+    const authTag = b.subarray(12, 28);
+    const cipherText = b.subarray(28);
+    const decipher = crypto.createDecipheriv(ALGORITHM, SECRET_KEY, iv);
+    decipher.setAuthTag(authTag);
+    return Buffer.concat([decipher.update(cipherText), decipher.final()]).toString("utf8");
+}
+
+export { encryptField, decryptField };
 
 // initialise express and socket server
 const app = express();
