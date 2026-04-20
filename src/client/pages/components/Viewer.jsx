@@ -4,6 +4,7 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import { io } from 'socket.io-client';
 
+const IO_URL = process.env.IO_URL;
 
 const ViewerToolbar = () => { return (
     <div id='viewerToolbar' className='viewerToolbar'>
@@ -28,7 +29,7 @@ export function Viewer({onBrowseFiles}) {
     // RUN ONCE ON LOAD EFFECT
     useEffect(() => {
         // make connection on load
-        const socketIo = io('http://localhost:3000');
+        const socketIo = io(IO_URL);
         setSocket(socketIo);
 
         return () => { // disconnect when done
