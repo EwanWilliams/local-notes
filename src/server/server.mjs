@@ -17,7 +17,6 @@ import { fileURLToPath } from 'url';
 
 // access env variables
 const PORT = process.env._PORT;
-const CLIENT = process.env._CLIENT_PORT;
 const DB_URI = process.env.DB_URI;
 const ADMIN_USER = process.env.SOCKET_ADMIN_USER;
 const ADMIN_PWD = process.env.SOCKET_ADMIN_PWD;
@@ -107,7 +106,7 @@ export async function init() {
 
     // middleware
     app.use(express.json());
-    app.use(morgan('dev'));
+    app.use(morgan('common'));
     app.use(cors());
 
     // connect to database
