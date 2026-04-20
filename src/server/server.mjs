@@ -11,6 +11,8 @@ import fileRoutes from './routes/file.mjs';
 import File from './models/File.mjs';
 import crypto from 'crypto';
 import prompts from 'prompts';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 
 // access env variables
@@ -97,7 +99,7 @@ export async function init() {
     const httpServer = createServer(app);
     const io = new Server(httpServer, {
         cors: {
-            origin: [`http://localhost:${CLIENT}`, 'https://admin.socket.io'],
+            origin: true,
             credentials: true,
             methods: ['GET', 'POST']
         }
@@ -149,6 +151,19 @@ export async function init() {
             password: ADMIN_PWD
         },
         mode: 'development',
+    });
+
+
+    // SERVE CLIENT FRONT-END
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const CLIENT_DIST = path.join(__dirname, '..', 'dist');
+    app.use(express.static(CLIENT_DIST));
+
+    // for all routes that aren't /api or socket serve the frontend
+    app.get(/^\/(?!api|socket\.io).*/, (req, res, next) => {
+        if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) return next();
+        res.sendFile(path.join(CLIENT_DIST, 'index.html'));
     });
 
 

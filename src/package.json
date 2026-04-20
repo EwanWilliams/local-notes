@@ -5,7 +5,8 @@
     "dev:client": "vite",
     "dev:server": "node server/start.mjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server/start.mjs"
   },
   "dependencies": {
     "@socket.io/admin-ui": "^0.5.1",
