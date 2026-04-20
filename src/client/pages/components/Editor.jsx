@@ -5,7 +5,7 @@ import 'quill/dist/quill.snow.css';
 import { io } from 'socket.io-client';
 
 // autosave interval, potential battery life implications
-const SAVE_INTERVAL = 2000
+const SAVE_INTERVAL = 2000;
 const IO_URL = process.env.IO_URL;
 
 
@@ -16,7 +16,6 @@ const EditorToolbar = () => { return (
             <button className='ql-fileBrowserButton'>Browse Files</button>
         </div>
         <div className='toolbar-centre'>
-            
             <select className="ql-font"></select>
             <button className="ql-bold"></button>
             <button className="ql-italic"></button>

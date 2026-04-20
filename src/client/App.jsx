@@ -9,7 +9,7 @@ import {
 import Edit from "./pages/edit";
 import View from "./pages/view";
 import New from "./pages/new";
-import TestBrowse from "./pages/testbrowse";
+import Browse from "./pages/browse";
 
 
 export default function App() {
@@ -17,21 +17,10 @@ export default function App() {
         <Router>
             <main>
                 <Routes>
-                    <Route
-                        path='/'
-                        element={
-                            <Navigate to='/testbrowse' />
-                        }
-                    />
-                    <Route
-                        path='/new'
-                        element={
-                            <New />
-                        } 
-                    />
+                    <Route path='/' element={<Browse />} />
+                    <Route path='/new' element={<New />} />
                     <Route path='/edit/:id' element={<Edit />}/>
                     <Route path='/view/:id' element={<View />}/>
-                    <Route path='/testbrowse' element={<TestBrowse />} />
                 </Routes>
             </main>
         </Router>
