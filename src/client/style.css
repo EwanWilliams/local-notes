@@ -145,7 +145,10 @@ body {
     display: none;
 }
 .app-title {
-    margin-left: 15px;
+    padding: 15px;
+    margin: 0;
+    cursor: pointer;
+    width: fit-content;
 }
 .file-browser-list {
     margin: 15px;
@@ -187,4 +190,27 @@ body {
 .file-view-button:active {
 	position:relative;
 	top:1px;
+}
+.new-button-container {
+    display: flex;
+    margin-right: 15px;
+    justify-content: right;
+}
+.file-new-button {
+	background-color:#bdca08;
+	border:1px solid #b3a815;
+	color:#ffffff;
+	text-decoration:none;
+}
+.file-new-button:hover {
+	background-color:#b6b312;
+}
+.file-new-button:active {
+	position:relative;
+	top:1px;
+}
+.file-browser-fullscreen {
+    color: #444;
+    background-color: rgb(220, 237, 238);
+    height: 100vh;
 }

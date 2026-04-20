@@ -18,8 +18,8 @@ export default function Browse() {
     }, []);
 
     return (
-        <Fragment>
+        <div className="file-browser-fullscreen">
             <FileBrowser files={fileList} />
-        </Fragment>
+        </div>
     );
 }
