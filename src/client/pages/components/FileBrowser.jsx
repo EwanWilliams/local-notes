@@ -27,8 +27,17 @@ export default function FileBrowser({files = []}) {
     // return list of files within container
     return (
         <Fragment>
-            <h2 className='app-title'>local-notes</h2>
+            <h2 className='app-title' onClick={() => {
+                navigate('/');
+                navigate(0);
+            }}>local.notes</h2>
             {fileList.length > 0 ? <ul className='file-browser-list'>{fileList}</ul> : <p>Loading...</p>}
+            <div className="new-button-container">
+                <button className='file-new-button' onClick={() => {
+                    navigate('/new');
+                    navigate(0);
+                }}>New File</button>
+            </div>
         </Fragment>
     );
 }

@@ -3,11 +3,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import { io } from 'socket.io-client';
+import QuillCursors from 'quill-cursors';
 
 // autosave interval, potential battery life implications
-const SAVE_INTERVAL = 2000
+const SAVE_INTERVAL = 2000;
 const IO_URL = process.env.IO_URL;
 
+// register quill-cursor
+if (!Quill.imports || !Quill.imports['modules/cursors']) {
+    Quill.register('modules/cursors', QuillCursors);
+}
 
 // html format toolbar options to enable custom buttons
 const EditorToolbar = () => { return (
@@ -16,7 +21,6 @@ const EditorToolbar = () => { return (
             <button className='ql-fileBrowserButton'>Browse Files</button>
         </div>
         <div className='toolbar-centre'>
-            
             <select className="ql-font"></select>
             <button className="ql-bold"></button>
             <button className="ql-italic"></button>
@@ -55,6 +59,11 @@ export function Editor({onBrowseFiles}) {
         const socketIo = io(IO_URL);
         setSocket(socketIo);
 
+        // TEMP DEBUG LOGS
+        socketIo.onAny((event, payload) => {
+            console.log('[socket recv]', event, payload);
+        });
+
         return () => { // disconnect when done
             socketIo.disconnect();
         }
@@ -85,6 +94,12 @@ export function Editor({onBrowseFiles}) {
                             onBrowseFiles();
                         }
                     }
+                },
+                cursors: {
+                    hideDelayMs: 2000,
+                    hideSpeedMs: 500,
+                    selectionChangeSource: null,
+                    transformOnTextChange: true
                 }
             }
         });
@@ -152,6 +167,56 @@ export function Editor({onBrowseFiles}) {
             socket.off('new-changes', receiveTextChange);
         }
     }, [socket, quill]);
+
+
+    // USER CURSOR HANDLING
+    useEffect(() => {
+        if (socket == null || quill == null) return;
+
+        const cursors = quill.getModule('cursors');
+        const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        const username = localStorage.getItem("nickname");
+        const myId = socket.id;
+
+        let lastSent = 0;
+        const onSelectionChange = (range) => {
+            const now = Date.now();
+            if (now - lastSent < 100) return; // throttle updates
+            lastSent = now;
+            socket.emit('cursor-update', { range: range ?? null, name: username, color });
+        };
+        quill.on('selection-change', onSelectionChange); // emit cursor update data on selection change
+
+        // handle receiving cursor updates from the server
+        const onRemoteCursorUpdate = (update) => {
+            // handle non updates
+            if (!update?.id || update.id === myId) return;
+            // handle removing cursors
+            if (!update.range) {
+                cursors.removeCursor(update.id);
+                return;
+            }
+            if (!cursors.cursors?.[update.id]) { // add new cursor if id isnt already in cursors
+                cursors.createCursor(update.id, update.name, update.color);
+            }
+            cursors.moveCursor(update.id, update.range); // update cursors
+        };
+        socket.on('cursor-update', onRemoteCursorUpdate);
+
+        // remove cursor when user leaves room
+        const onUserLeft = (id) => {
+            cursors.removeCursor(id);
+        };
+        socket.on('user-left', onUserLeft);
+
+        // cleanup
+        return () => {
+            quill.off('selection-change', onSelectionChange);
+            socket.off('cursor-update', onRemoteCursorUpdate);
+            socket.off('user-left', onUserLeft);
+            socket.emit('leave-file', { fileId, id: myId }); // use captured id
+        };
+    }, [socket, quill, fileId]);
 
 
     // every interval save whole contents of the quill editor to the database
