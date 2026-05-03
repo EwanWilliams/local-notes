@@ -125,6 +125,7 @@ export async function init() {
             const loadFile = await findFile(fileId);
             if (loadFile) { // if file found successfully
                 socket.join(fileId); // put the client in correct room
+                socket.data.fileId = fileId; // store roomId
                 socket.emit('load-file', loadFile.data); // send the file
             } else {
                 socket.emit('failed-load'); // tell the client load failed
@@ -139,6 +140,29 @@ export async function init() {
             socket.on('save-file', async data => {
                 await File.findByIdAndUpdate(fileId, { data });
             });
+
+
+            // when cursor updates received
+            socket.on('cursor-update', update => {
+                const room = socket.data.fileId;
+                if (!room) return;
+                socket.broadcast.to(room).emit('cursor-update', { ...update, id: socket.id });
+            });
+
+            // handle user leaving a room
+            socket.on('leave-file', () => {
+                const room = socket.data.fileId;
+                if (!room) return;
+                socket.leave(room);
+                socket.data.fileId = undefined;
+                socket.to(room).emit('user-left', socket.id);
+            });
+
+            // let other clients know when someone disconnected
+            socket.on('disconnect', () => {
+                const room = socket.data.fileId;
+                if (room) socket.to(room).emit('user-left', socket.id);
+            });
         });
     });
 
@@ -152,7 +176,7 @@ export async function init() {
         mode: 'development',
     });
 
-
+/**
     // SERVE CLIENT FRONT-END
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -160,11 +184,11 @@ export async function init() {
     app.use(express.static(CLIENT_DIST));
 
     // for all routes that aren't /api or socket serve the frontend
-    app.get(/^\/(?!api|socket\.io).*/, (req, res, next) => {
+    app.get(/^\/(?!api|socket\.io).*//*, (req, res, next) => {
         if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) return next();
         res.sendFile(path.join(CLIENT_DIST, 'index.html'));
     });
-
+*/
 
     // run server listening on set port
     httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`));
