@@ -4,7 +4,7 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import { io } from 'socket.io-client';
 
-const IO_URL = 'localhost:3000'; //process.env.IO_URL;
+const IO_URL = process.env.IO_URL;
 
 const ViewerToolbar = () => { return (
     <div id='viewerToolbar' className='viewerToolbar'>

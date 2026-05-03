@@ -176,7 +176,7 @@ export async function init() {
         mode: 'development',
     });
 
-/**
+
     // SERVE CLIENT FRONT-END
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
@@ -184,11 +184,11 @@ export async function init() {
     app.use(express.static(CLIENT_DIST));
 
     // for all routes that aren't /api or socket serve the frontend
-    app.get(/^\/(?!api|socket\.io).*//*, (req, res, next) => {
+    app.get(/^\/(?!api|socket\.io).*/, (req, res, next) => {
         if (req.path.startsWith('/api') || req.path.startsWith('/socket.io')) return next();
         res.sendFile(path.join(CLIENT_DIST, 'index.html'));
     });
-*/
+
 
     // run server listening on set port
     httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`));

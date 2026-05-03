@@ -7,7 +7,7 @@ import QuillCursors from 'quill-cursors';
 
 // autosave interval, potential battery life implications
 const SAVE_INTERVAL = 2000;
-const IO_URL = 'http://localhost:3000'; //process.env.IO_URL;
+const IO_URL = process.env.IO_URL;
 
 // register quill-cursor
 if (!Quill.imports || !Quill.imports['modules/cursors']) {
@@ -175,7 +175,7 @@ export function Editor({onBrowseFiles}) {
 
         const cursors = quill.getModule('cursors');
         const color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-        const username = "test_user";
+        const username = localStorage.getItem("nickname");
         const myId = socket.id;
 
         let lastSent = 0;
